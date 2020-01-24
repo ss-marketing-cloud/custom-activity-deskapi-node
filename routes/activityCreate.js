@@ -47,11 +47,28 @@ exports.validate = function( req, res ) {
  * POST Handler for /execute/ route of Activity.
  */
 exports.execute = function( req, res ) {
-    // Data from the req and put it in an array accessible to the main app.
-    //console.log( req.body );
-    activityUtils.logData( req );
-
-	initCase(req,res);
+	
+	var jsforce = require('jsforce');
+var conn = new jsforce.Connection({
+  oauth2 : {
+    // you can change loginUrl to connect to sandbox or prerelease env.
+    // loginUrl : 'https://test.salesforce.com',
+    clientId : 'qqxi8zdlotke9grvpxbfnxep',
+    clientSecret : 'WLiyaItzeL5T07WRyFwaatcQ',
+    redirectUri : 'https://mcqqlglcmqcz3ynbszs5zczr0qjy.auth.marketingcloudapis.com/v2/token'
+  }
+});
+conn.login(username, password, function(err, userInfo) {
+  if (err) { return console.error(err); }
+  // Now you can get the access token and instance URL information.
+  // Save them to establish connection next time.
+  console.log(conn.accessToken);
+  console.log(conn.instanceUrl);
+  // logged in user property
+  console.log("User ID: " + userInfo.id);
+  console.log("Org ID: " + userInfo.organizationId);
+  // ...
+});
 };
 
 
